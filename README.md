@@ -4,3 +4,4 @@ The idea revolves around tracking motion by gaining control over what is display
 Selections are maximized using the current implementation, which allows users to use two approaches to select a moving target on the screen. This study paves a path to further explore the concept of ”Pointing without a Pointer”, by inducing gesture controls. With its user-friendly interface and entertaining, interactive game, the suggested system enables users to experiment with gestures and correlation. 
 The offered alternatives for selection tasks may be advantageous to numerous sectors. The medical industry, and more specifically the discipline of physiotherapy, could widely benefit from classifying significant hand gestures and prompting users to closely mimic a given trajectory.
 
+Note: This project was implemented under the supervision of Professor Dr. John Williamson, School of Computing Science, University of Glasgow.
