@@ -18,7 +18,7 @@ def draw_text(surface, text, pos, color, font=FONTS["medium"], pos_mode="top_lef
 
 
 
-def button(surface, pos_y, text=None, click_sound=None):
+def button(surface, pos_y, text=None):
     rect = pygame.Rect((SCREEN_WIDTH//2 - BUTTONS_SIZES[0]//2, pos_y), BUTTONS_SIZES)
 
     on_button = False
