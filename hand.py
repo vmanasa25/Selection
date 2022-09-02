@@ -11,13 +11,11 @@ class Hand:
         self.image_smaller = image.load("Assets/hand.png", size=(HAND_SIZE - 50, HAND_SIZE - 50))
         self.rect = pygame.Rect(SCREEN_WIDTH//2, SCREEN_HEIGHT//2, HAND_HITBOX_SIZE[0], HAND_HITBOX_SIZE[1])
         self.left_click = False
-        #self.hand_tracking = HandTracking()
 
 
 
-    def follow_mouse(self): # change the hand pos center at the mouse pos
+    def follow_mouse(self): 
         self.rect.center = pygame.mouse.get_pos()
-        #self.hand_tracking.display_hand()
 
     def follow_mediapipe_hand(self, x, y):
         self.rect.center = (x, y)
@@ -37,11 +35,19 @@ class Hand:
         return [rectangle for rectangle in rects if self.rect.colliderect(rectangle.rect)]
 
 
-    def select_rects(self, rects, score): # will select rectangles that collide with the hand when the left mouse button is pressed
-        if self.left_click: # if left click
+    def select_rects(self, rects, score): # will select rectangles that collide with the hand gesture is made
+        if self.left_click: #if gesture
             for rectangle in self.on_rect(rects):
-                rect_score = rectangle.kill(rects)
-                score += rect_score
+                score += 50
         else:
             self.left_click = False
+
+        return score
+
+
+    def select_rects_new(self, rects, score): # will select all rectangles 
+        for rectangle in self.on_rect(rects):
+            rect_score = rectangle.kill(rects)
+            score += 1000
+
         return score

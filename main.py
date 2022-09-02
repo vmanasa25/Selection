@@ -5,7 +5,7 @@ import os
 from settings import *
 from menu import Menu
 from game import Game
-
+from hand import Hand
 from scipy.stats.stats import pearsonr   
 
 # Setup pygame/window --------------------------------------------- #
@@ -22,8 +22,7 @@ fps_font = pygame.font.SysFont("coopbl", 22)
 
 # Variables ------------------------------------------------------- #
 state = "menu"
-returnedList = np.arange(200).reshape(100,2)
-returnedListOne = np.arange(200).reshape(100,2)
+
 
 # Creation -------------------------------------------------------- #
 game = Game(SCREEN)
@@ -44,19 +43,17 @@ def user_events():
 
 def update():
     global state
-    global returnedList
-    global returnedListOne
     if state == "menu":
         if menu.update() == "game":
             game.reset() # reset the game to start a new game
             state = "game"
     elif state == "game":
-        status, returnedList, returnedListOne = game.update()
+        status, l1, l2 = game.update()
+        game.calc()
         if status == "menu":
             state = "menu"
     pygame.display.update()
     mainClock.tick(FPS)
-    return returnedList, returnedListOne
 
 
 
@@ -67,20 +64,8 @@ while True:
     user_events()
 
     # Update ------------------------------------------------------ #
-    returned, returnedone = update()
-    # returned = returned[returned>0]
-    # returnedone = returnedone[returnedone>0]
-    # # print(returned)
-    # print(returned)
+    update()
 
-    if (len(returned) == len(returnedone)) and (len(returned)!=0 and len(returnedone)!=0):
-        corr_x = pearsonr(returned[:,0], returnedone[:,0])
-        # print(corr_x)
-        corr_y = pearsonr(returned[:,1], returnedone[:,1])
-        # print(corr_y)
-        correl = (corr_x[0] + corr_y[0])/2
-        print(correl)
-        
 
     # FPSl
     if DRAW_FPS:

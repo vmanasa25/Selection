@@ -1,7 +1,7 @@
+#Hand-tracking functionality
 import cv2
 import mediapipe as mp
 from settings import *
-import numpy as np
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
@@ -20,15 +20,13 @@ class HandTracking:
     def scan_hands(self, image):
         rows, cols, _ = image.shape
 
-        # Flip the image horizontally for a later selfie-view display, and convert
-        # the BGR image to RGB.
+
         image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
-        # To improve performance, optionally mark the image as not writeable to
-        # pass by reference.
+
         image.flags.writeable = False
         self.results = self.hand_tracking.process(image)
 
-        # Draw the hand annotations on the image.
+        # Draw the hand annotations on the image
         image.flags.writeable = True
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
@@ -43,6 +41,7 @@ class HandTracking:
 
                 x1, y1 = hand_landmarks.landmark[12].x, hand_landmarks.landmark[12].y
 
+                #checking for hand fold
                 if y1 > y:
                     self.hand_closed = True
 

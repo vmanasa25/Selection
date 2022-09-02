@@ -14,23 +14,21 @@ BUTTONS_SIZES = (240, 90)
 HAND_SIZE = 200
 HAND_HITBOX_SIZE = (60, 80)
 RECTANGLE_SIZES = (50, 38)
-RECTANGLE_SIZE_RANDOMIZE = (1,2) # for each new rectangle, it will multiply the size with an random value beteewn X and Y
+RECTANGLE_SIZE_RANDOMIZE = (1,2) # for each new rectangle, it will multiply the size with an random value beteewn 1 and 2
 
 COORDINATES_RECTANGLE = []
 COORDINATES_HAND = []
-# returned = np.array((100,2))
 returned = np.arange(200).reshape(100,2)
-# returnedone = np.array((100,2))
 returnedone = np.arange(200).reshape(100,2)
 
 # drawing
-DRAW_HITBOX = False # will draw all the hitbox
+DRAW_HITBOX = False # will draw all the hitboxes
 
 # animation
-ANIMATION_SPEED = 0.08 # the frame of the rectangles will change every X sec
+ANIMATION_SPEED = 0.08 # the frame of the rectangles will change 
 
 # difficulty
-GAME_DURATION = 15 # the game will last X sec
+GAME_DURATION = 30 
 RECTANGLE_SPAWN_TIME = 0
 RECTANGLE_MOVE_SPEED = {"min": 1, "max": 2}
 

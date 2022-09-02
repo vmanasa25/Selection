@@ -1,3 +1,4 @@
+#Menu screen creation
 import pygame
 import sys
 from settings import *
@@ -23,6 +24,6 @@ class Menu:
         if ui.button(self.surface, 320, "START"):
             return "game"
 
-        if ui.button(self.surface, 320+BUTTONS_SIZES[1]*1.5, "Quit"):
+        if ui.button(self.surface, 320+BUTTONS_SIZES[1]*1.5, "QUIT"):
             pygame.quit()
             sys.exit()

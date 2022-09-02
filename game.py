@@ -1,6 +1,5 @@
 import pygame
 import time
-import random
 from settings import *
 from background import Background
 from hand import Hand
@@ -9,6 +8,8 @@ from rectangle import Rectangle
 import cv2
 import ui
 import numpy as np 
+from scipy.stats.stats import pearsonr   
+
 
 class Game:
     def __init__(self, surface):
@@ -19,7 +20,7 @@ class Game:
         self.cap = cv2.VideoCapture(0)
 
 
-    def reset(self): # reset all the needed variables
+    def reset(self): 
         self.hand_tracking = HandTracking()
         self.hand = Hand()
         self.rectangles = []
@@ -28,19 +29,10 @@ class Game:
         self.game_start_time = time.time()
 
 
-    def spawn_rectangles(self):
-    #     t = time.time()
-    #     if t > self.rectangles_spawn_timer:
-    #         self.rectangles_spawn_timer = t + RECTANGLE_SPAWN_TIME
 
-    #         nb = (GAME_DURATION-self.time_left)/GAME_DURATION * 100  / 2  # increase from 0 to 50 during all  the game (linear)
-            # if random.randint(0, 3) > nb:
-        #self.rectangles.append(Rectangle())
-            # num = np.random.randint(0,2)
-            # if num > nb:
-            #     self.rectangles.append(Rectangle())
 
-            # spawn a other mosquito after the half of the game
+    def spawn_rectangles(self): #spawns rectangles
+
         if self.time_left > GAME_DURATION - 0.4:
             self.rectangles.append(Rectangle())
 
@@ -56,7 +48,6 @@ class Game:
         COORDINATES_HAND.append(self.hand.rect.center) 
         if len(COORDINATES_HAND) == 101:
             COORDINATES_HAND.pop(0)
-        # print(COORDINATES_HAND)
         return COORDINATES_HAND
 
     def draw(self):
@@ -65,7 +56,6 @@ class Game:
         # draw the rectangles
         for i in self.rectangles:
             self.rectlist = i.draw(self.surface)
-            #print(rectlist)
         # draw the hand
         self.hand.draw(self.surface)
         # draw the score
@@ -82,28 +72,25 @@ class Game:
         self.time_left = max(round(GAME_DURATION - (time.time() - self.game_start_time), 1), 0)
 
 
-
     def update(self):
 
         self.load_camera()
         new = np.array(self.set_hand_position())
 
         self.game_time_update()
-
+    
         newone =  np.array(self.draw())
-
 
         if self.time_left > 0:
             self.spawn_rectangles()
             (x, y) = self.hand_tracking.get_hand_center()
             self.hand.rect.center = (x, y)
             self.hand.left_click = self.hand_tracking.hand_closed
-            #print("Hand closed", self.hand.left_click)
             if self.hand.left_click:
                 self.hand.image = self.hand.image_smaller.copy()
             else:
                 self.hand.image = self.hand.orig_image.copy()
-            self.score = self.hand.select_rects(self.rectangles, self.score)
+            
             for i in self.rectangles:
                 i.move()
 
@@ -111,8 +98,23 @@ class Game:
             if ui.button(self.surface, 540, "Continue"):
                 return "menu", new, newone
 
-
         cv2.imshow("Frame", self.frame)
         cv2.waitKey(1)
         return None, new, newone
+
+
+    def calc(self): #Calculation of correlation coefficient
+        
+        status, returned, returnedone = self.update()
+        if (len(returned) == len(returnedone)) and (len(returned)!=0 and len(returnedone)!=0):
+            corr_x = pearsonr(returned[:,0], returnedone[:,0])
+            corr_y = pearsonr(returned[:,1], returnedone[:,1])
+            correl = (corr_x[0] + corr_y[0])/2
+            print(correl)
+            self.score = self.hand.select_rects(self.rectangles, self.score)
+            if correl > 0.90:
+                self.score = self.score + 1
+            if correl > 0.98:
+                self.score = self.hand.select_rects_new(self.rectangles, self.score)
+    
 

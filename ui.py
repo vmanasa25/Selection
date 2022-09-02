@@ -35,5 +35,5 @@ def button(surface, pos_y, text=None, click_sound=None):
         draw_text(surface, text, rect.center, COLORS["buttons"]["text"], pos_mode="center",
                     shadow=True, shadow_color=COLORS["buttons"]["shadow"])
 
-    if on_button and pygame.mouse.get_pressed()[0]: # if the user press on the button
+    if on_button and pygame.mouse.get_pressed()[0]: # if the user clicks on the button
         return True
